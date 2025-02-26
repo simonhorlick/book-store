@@ -1,0 +1,33 @@
+{
+  "name": "book-store",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "generate": "graphql-codegen --config codegen.ts",
+    "generate:watch": "graphql-codegen --config codegen.ts --watch",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.11.9",
+    "graphql": "^16.10.0",
+    "immutable": "^5.0.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0"
+  },
+  "devDependencies": {
+    "@0no-co/graphqlsp": "^1.12.16",
+    "@graphql-codegen/cli": "^5.0.5",
+    "@parcel/watcher": "^2.5.1",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "typescript": "~5.7.3",
+    "vite": "^5.4.10",
+    "vitest": "^2.1.4"
+  }
+}

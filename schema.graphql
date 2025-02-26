@@ -1,0 +1,23 @@
+schema {
+  query: Query
+  #  mutation: Mutation
+}
+
+type Query {
+  listBooks(limit: Int, offset: Int): [Book!]!
+  getBook(isbn: String): Book
+}
+
+#type Mutation {
+#}
+
+type Author {
+  name: String
+  bio: String
+}
+
+type Book {
+  author: Author
+  title: String
+  isbn: String
+}
