@@ -5,6 +5,6 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 8080, // required for auth0 callback to localhost:8080
+    // port: 8080,
   },
 });

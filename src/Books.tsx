@@ -6,21 +6,21 @@ import { Book } from "./Book";
 
 const listBooksQuery = graphql(`
   query ListBooks {
-    listBooks {
+    books {
       ...BookFragment
     }
   }
 `);
 
 export function Books() {
-  const [books, setBooks] = useState<ListBooksQuery>();
+  const [data, setData] = useState<ListBooksQuery>();
   useEffect(() => {
-    execute(listBooksQuery).then((res) => setBooks(res));
+    execute(listBooksQuery).then((res) => setData(res));
   }, []);
 
   return (
     <div>
-      {books?.listBooks?.map((book) => (
+      {data?.books?.map((book) => (
         <Book book={book} />
       ))}
     </div>

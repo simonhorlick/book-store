@@ -5,7 +5,7 @@ import {
 import { graphql } from "./__generated__/gql";
 
 export const AuthorFragment = graphql(`
-  fragment AuthorFragment on Author {
+  fragment AuthorFragment on Authors {
     name
     bio
   }

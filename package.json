@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "generate": "graphql-codegen --config codegen.ts",
     "generate:watch": "graphql-codegen --config codegen.ts --watch",
+    "fetch": "gq http://localhost:8080/v1/graphql --introspect -H \"x-hasura-admin-secret: $SECRET\" > schema.graphql",
     "test": "vitest"
   },
   "dependencies": {
