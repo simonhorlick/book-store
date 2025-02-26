@@ -14,6 +14,7 @@
   "dependencies": {
     "@apollo/client": "^3.11.9",
     "graphql": "^16.10.0",
+    "graphqurl": "^2.0.0",
     "immutable": "^5.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
