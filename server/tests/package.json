@@ -1,0 +1,26 @@
+{
+  "name": "tests",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "compile": "npm run generate && tsc",
+    "prestart": "npm run compile",
+    "generate": "graphql-codegen",
+    "test": "HASURA_ADMIN_SECRET=l84cu9DJuODPxpklhjmER4NQpjdPzSxk0cswnIjPLQugJvbSkhW62JG3tQ1pT1aEolevKhFCBa9TC1ldLpCnvsQT vitest",
+    "start": "node ./dist/src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@apollo/server": "^4.11.3",
+    "pg": "^8.13.3",
+    "vitest": "^3.0.7"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.5",
+    "@graphql-codegen/typescript-resolvers": "^4.4.4",
+    "@types/pg": "^8.11.11",
+    "typescript": "~5.7.3"
+  }
+}

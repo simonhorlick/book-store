@@ -377,10 +377,40 @@ input BooksUpdates {
   where: BooksBoolExp!
 }
 
+"""
+Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
+"""
+input IntComparisonExp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _isNull: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
 """An object with globally unique ID"""
 interface Node {
   """A globally unique identifier"""
   id: ID!
+}
+
+"""
+Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'.
+"""
+input NumericComparisonExp {
+  _eq: numeric
+  _gt: numeric
+  _gte: numeric
+  _in: [numeric!]
+  _isNull: Boolean
+  _lt: numeric
+  _lte: numeric
+  _neq: numeric
+  _nin: [numeric!]
 }
 
 """column ordering options"""
@@ -404,11 +434,835 @@ enum OrderBy {
   DESC_NULLS_LAST
 }
 
+"""
+columns and relationships of "order_items"
+"""
+type OrderItems implements Node {
+  createdAt: timestamptz!
+  id: ID!
+  orderId: bigint!
+  price: numeric!
+
+  """An object relationship"""
+  product: Products!
+  productId: bigint!
+  quantity: Int!
+  updatedAt: timestamptz!
+}
+
+"""
+aggregated selection of "order_items"
+"""
+type OrderItemsAggregate {
+  aggregate: OrderItemsAggregateFields
+  nodes: [OrderItems!]!
+}
+
+input OrderItemsAggregateBoolExp {
+  count: orderItemsAggregateBoolExpCount
+}
+
+"""
+aggregate fields of "order_items"
+"""
+type OrderItemsAggregateFields {
+  avg: OrderItemsAvgFields
+  count(columns: [OrderItemsSelectColumn!], distinct: Boolean): Int!
+  max: OrderItemsMaxFields
+  min: OrderItemsMinFields
+  stddev: OrderItemsStddevFields
+  stddevPop: OrderItemsStddevPopFields
+  stddevSamp: OrderItemsStddevSampFields
+  sum: OrderItemsSumFields
+  varPop: OrderItemsVarPopFields
+  varSamp: OrderItemsVarSampFields
+  variance: OrderItemsVarianceFields
+}
+
+"""
+order by aggregate values of table "order_items"
+"""
+input OrderItemsAggregateOrderBy {
+  avg: OrderItemsAvgOrderBy
+  count: OrderBy
+  max: OrderItemsMaxOrderBy
+  min: OrderItemsMinOrderBy
+  stddev: OrderItemsStddevOrderBy
+  stddevPop: OrderItemsStddevPopOrderBy
+  stddevSamp: OrderItemsStddevSampOrderBy
+  sum: OrderItemsSumOrderBy
+  varPop: OrderItemsVarPopOrderBy
+  varSamp: OrderItemsVarSampOrderBy
+  variance: OrderItemsVarianceOrderBy
+}
+
+"""
+input type for inserting array relation for remote table "order_items"
+"""
+input OrderItemsArrRelInsertInput {
+  data: [OrderItemsInsertInput!]!
+
+  """upsert condition"""
+  onConflict: OrderItemsOnConflict
+}
+
+"""aggregate avg on columns"""
+type OrderItemsAvgFields {
+  id: Float
+  orderId: Float
+  price: Float
+  productId: Float
+  quantity: Float
+}
+
+"""
+order by avg() on columns of table "order_items"
+"""
+input OrderItemsAvgOrderBy {
+  id: OrderBy
+  orderId: OrderBy
+  price: OrderBy
+  productId: OrderBy
+  quantity: OrderBy
+}
+
+"""
+Boolean expression to filter rows from the table "order_items". All fields are combined with a logical 'AND'.
+"""
+input OrderItemsBoolExp {
+  _and: [OrderItemsBoolExp!]
+  _not: OrderItemsBoolExp
+  _or: [OrderItemsBoolExp!]
+  createdAt: TimestamptzComparisonExp
+  id: BigintComparisonExp
+  orderId: BigintComparisonExp
+  price: NumericComparisonExp
+  product: ProductsBoolExp
+  productId: BigintComparisonExp
+  quantity: IntComparisonExp
+  updatedAt: TimestamptzComparisonExp
+}
+
+"""
+A Relay connection object on "order_items"
+"""
+type OrderItemsConnection {
+  edges: [OrderItemsEdge!]!
+  pageInfo: PageInfo!
+}
+
+"""
+unique or primary key constraints on table "order_items"
+"""
+enum OrderItemsConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  order_items_pkey
+}
+
+type OrderItemsEdge {
+  cursor: String!
+  node: OrderItems!
+}
+
+"""
+input type for incrementing numeric columns in table "order_items"
+"""
+input OrderItemsIncInput {
+  orderId: bigint
+  price: numeric
+  productId: bigint
+  quantity: Int
+}
+
+"""
+input type for inserting data into table "order_items"
+"""
+input OrderItemsInsertInput {
+  createdAt: timestamptz
+  orderId: bigint
+  price: numeric
+  product: ProductsObjRelInsertInput
+  productId: bigint
+  quantity: Int
+  updatedAt: timestamptz
+}
+
+"""aggregate max on columns"""
+type OrderItemsMaxFields {
+  createdAt: timestamptz
+  id: bigint
+  orderId: bigint
+  price: numeric
+  productId: bigint
+  quantity: Int
+  updatedAt: timestamptz
+}
+
+"""
+order by max() on columns of table "order_items"
+"""
+input OrderItemsMaxOrderBy {
+  createdAt: OrderBy
+  id: OrderBy
+  orderId: OrderBy
+  price: OrderBy
+  productId: OrderBy
+  quantity: OrderBy
+  updatedAt: OrderBy
+}
+
+"""aggregate min on columns"""
+type OrderItemsMinFields {
+  createdAt: timestamptz
+  id: bigint
+  orderId: bigint
+  price: numeric
+  productId: bigint
+  quantity: Int
+  updatedAt: timestamptz
+}
+
+"""
+order by min() on columns of table "order_items"
+"""
+input OrderItemsMinOrderBy {
+  createdAt: OrderBy
+  id: OrderBy
+  orderId: OrderBy
+  price: OrderBy
+  productId: OrderBy
+  quantity: OrderBy
+  updatedAt: OrderBy
+}
+
+"""
+response of any mutation on the table "order_items"
+"""
+type OrderItemsMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [OrderItems!]!
+}
+
+"""
+on_conflict condition type for table "order_items"
+"""
+input OrderItemsOnConflict {
+  constraint: OrderItemsConstraint!
+  updateColumns: [OrderItemsUpdateColumn!]! = []
+  where: OrderItemsBoolExp
+}
+
+"""Ordering options when selecting data from "order_items"."""
+input OrderItemsOrderBy {
+  createdAt: OrderBy
+  id: OrderBy
+  orderId: OrderBy
+  price: OrderBy
+  product: ProductsOrderBy
+  productId: OrderBy
+  quantity: OrderBy
+  updatedAt: OrderBy
+}
+
+"""primary key columns input for table: order_items"""
+input OrderItemsPkColumnsInput {
+  id: bigint!
+}
+
+"""
+select columns of table "order_items"
+"""
+enum OrderItemsSelectColumn {
+  """column name"""
+  createdAt
+
+  """column name"""
+  id
+
+  """column name"""
+  orderId
+
+  """column name"""
+  price
+
+  """column name"""
+  productId
+
+  """column name"""
+  quantity
+
+  """column name"""
+  updatedAt
+}
+
+"""
+input type for updating data in table "order_items"
+"""
+input OrderItemsSetInput {
+  createdAt: timestamptz
+  orderId: bigint
+  price: numeric
+  productId: bigint
+  quantity: Int
+  updatedAt: timestamptz
+}
+
+"""aggregate stddev on columns"""
+type OrderItemsStddevFields {
+  id: Float
+  orderId: Float
+  price: Float
+  productId: Float
+  quantity: Float
+}
+
+"""
+order by stddev() on columns of table "order_items"
+"""
+input OrderItemsStddevOrderBy {
+  id: OrderBy
+  orderId: OrderBy
+  price: OrderBy
+  productId: OrderBy
+  quantity: OrderBy
+}
+
+"""aggregate stddevPop on columns"""
+type OrderItemsStddevPopFields {
+  id: Float
+  orderId: Float
+  price: Float
+  productId: Float
+  quantity: Float
+}
+
+"""
+order by stddevPop() on columns of table "order_items"
+"""
+input OrderItemsStddevPopOrderBy {
+  id: OrderBy
+  orderId: OrderBy
+  price: OrderBy
+  productId: OrderBy
+  quantity: OrderBy
+}
+
+"""aggregate stddevSamp on columns"""
+type OrderItemsStddevSampFields {
+  id: Float
+  orderId: Float
+  price: Float
+  productId: Float
+  quantity: Float
+}
+
+"""
+order by stddevSamp() on columns of table "order_items"
+"""
+input OrderItemsStddevSampOrderBy {
+  id: OrderBy
+  orderId: OrderBy
+  price: OrderBy
+  productId: OrderBy
+  quantity: OrderBy
+}
+
+"""aggregate sum on columns"""
+type OrderItemsSumFields {
+  id: bigint
+  orderId: bigint
+  price: numeric
+  productId: bigint
+  quantity: Int
+}
+
+"""
+order by sum() on columns of table "order_items"
+"""
+input OrderItemsSumOrderBy {
+  id: OrderBy
+  orderId: OrderBy
+  price: OrderBy
+  productId: OrderBy
+  quantity: OrderBy
+}
+
+"""
+update columns of table "order_items"
+"""
+enum OrderItemsUpdateColumn {
+  """column name"""
+  createdAt
+
+  """column name"""
+  orderId
+
+  """column name"""
+  price
+
+  """column name"""
+  productId
+
+  """column name"""
+  quantity
+
+  """column name"""
+  updatedAt
+}
+
+input OrderItemsUpdates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: OrderItemsIncInput
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: OrderItemsSetInput
+
+  """filter the rows which have to be updated"""
+  where: OrderItemsBoolExp!
+}
+
+"""aggregate varPop on columns"""
+type OrderItemsVarPopFields {
+  id: Float
+  orderId: Float
+  price: Float
+  productId: Float
+  quantity: Float
+}
+
+"""
+order by varPop() on columns of table "order_items"
+"""
+input OrderItemsVarPopOrderBy {
+  id: OrderBy
+  orderId: OrderBy
+  price: OrderBy
+  productId: OrderBy
+  quantity: OrderBy
+}
+
+"""aggregate varSamp on columns"""
+type OrderItemsVarSampFields {
+  id: Float
+  orderId: Float
+  price: Float
+  productId: Float
+  quantity: Float
+}
+
+"""
+order by varSamp() on columns of table "order_items"
+"""
+input OrderItemsVarSampOrderBy {
+  id: OrderBy
+  orderId: OrderBy
+  price: OrderBy
+  productId: OrderBy
+  quantity: OrderBy
+}
+
+"""aggregate variance on columns"""
+type OrderItemsVarianceFields {
+  id: Float
+  orderId: Float
+  price: Float
+  productId: Float
+  quantity: Float
+}
+
+"""
+order by variance() on columns of table "order_items"
+"""
+input OrderItemsVarianceOrderBy {
+  id: OrderBy
+  orderId: OrderBy
+  price: OrderBy
+  productId: OrderBy
+  quantity: OrderBy
+}
+
+"""
+columns and relationships of "orders"
+"""
+type Orders implements Node {
+  createdAt: timestamptz!
+  id: ID!
+
+  """An array relationship"""
+  orderItems(
+    """distinct select on columns"""
+    distinctOn: [OrderItemsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [OrderItemsOrderBy!]
+
+    """filter the rows returned"""
+    where: OrderItemsBoolExp
+  ): [OrderItems!]!
+
+  """An aggregate relationship"""
+  orderItemsAggregate(
+    """distinct select on columns"""
+    distinctOn: [OrderItemsSelectColumn!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [OrderItemsOrderBy!]
+
+    """filter the rows returned"""
+    where: OrderItemsBoolExp
+  ): OrderItemsAggregate!
+
+  """An array relationship connection"""
+  orderItems_connection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinctOn: [OrderItemsSelectColumn!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [OrderItemsOrderBy!]
+
+    """filter the rows returned"""
+    where: OrderItemsBoolExp
+  ): OrderItemsConnection!
+  status: String!
+  updatedAt: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "orders". All fields are combined with a logical 'AND'.
+"""
+input OrdersBoolExp {
+  _and: [OrdersBoolExp!]
+  _not: OrdersBoolExp
+  _or: [OrdersBoolExp!]
+  createdAt: TimestamptzComparisonExp
+  id: BigintComparisonExp
+  orderItems: OrderItemsBoolExp
+  orderItemsAggregate: OrderItemsAggregateBoolExp
+  status: StringComparisonExp
+  updatedAt: TimestamptzComparisonExp
+}
+
+"""
+A Relay connection object on "orders"
+"""
+type OrdersConnection {
+  edges: [OrdersEdge!]!
+  pageInfo: PageInfo!
+}
+
+"""
+unique or primary key constraints on table "orders"
+"""
+enum OrdersConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  orders_pkey
+}
+
+type OrdersEdge {
+  cursor: String!
+  node: Orders!
+}
+
+"""
+input type for inserting data into table "orders"
+"""
+input OrdersInsertInput {
+  createdAt: timestamptz
+  orderItems: OrderItemsArrRelInsertInput
+  status: String
+  updatedAt: timestamptz
+}
+
+"""
+response of any mutation on the table "orders"
+"""
+type OrdersMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [Orders!]!
+}
+
+"""
+on_conflict condition type for table "orders"
+"""
+input OrdersOnConflict {
+  constraint: OrdersConstraint!
+  updateColumns: [OrdersUpdateColumn!]! = []
+  where: OrdersBoolExp
+}
+
+"""Ordering options when selecting data from "orders"."""
+input OrdersOrderBy {
+  createdAt: OrderBy
+  id: OrderBy
+  orderItemsAggregate: OrderItemsAggregateOrderBy
+  status: OrderBy
+  updatedAt: OrderBy
+}
+
+"""primary key columns input for table: orders"""
+input OrdersPkColumnsInput {
+  id: bigint!
+}
+
+"""
+select columns of table "orders"
+"""
+enum OrdersSelectColumn {
+  """column name"""
+  createdAt
+
+  """column name"""
+  id
+
+  """column name"""
+  status
+
+  """column name"""
+  updatedAt
+}
+
+"""
+input type for updating data in table "orders"
+"""
+input OrdersSetInput {
+  createdAt: timestamptz
+  status: String
+  updatedAt: timestamptz
+}
+
+"""
+update columns of table "orders"
+"""
+enum OrdersUpdateColumn {
+  """column name"""
+  createdAt
+
+  """column name"""
+  status
+
+  """column name"""
+  updatedAt
+}
+
+input OrdersUpdates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: OrdersSetInput
+
+  """filter the rows which have to be updated"""
+  where: OrdersBoolExp!
+}
+
 type PageInfo {
   endCursor: String!
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
   startCursor: String!
+}
+
+"""
+columns and relationships of "products"
+"""
+type Products implements Node {
+  createdAt: timestamptz!
+  id: ID!
+  name: String!
+  price: numeric!
+  stock: Int!
+  updatedAt: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "products". All fields are combined with a logical 'AND'.
+"""
+input ProductsBoolExp {
+  _and: [ProductsBoolExp!]
+  _not: ProductsBoolExp
+  _or: [ProductsBoolExp!]
+  createdAt: TimestamptzComparisonExp
+  id: BigintComparisonExp
+  name: StringComparisonExp
+  price: NumericComparisonExp
+  stock: IntComparisonExp
+  updatedAt: TimestamptzComparisonExp
+}
+
+"""
+A Relay connection object on "products"
+"""
+type ProductsConnection {
+  edges: [ProductsEdge!]!
+  pageInfo: PageInfo!
+}
+
+"""
+unique or primary key constraints on table "products"
+"""
+enum ProductsConstraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  products_pkey
+}
+
+type ProductsEdge {
+  cursor: String!
+  node: Products!
+}
+
+"""
+input type for incrementing numeric columns in table "products"
+"""
+input ProductsIncInput {
+  price: numeric
+  stock: Int
+}
+
+"""
+input type for inserting data into table "products"
+"""
+input ProductsInsertInput {
+  createdAt: timestamptz
+  name: String
+  price: numeric
+  stock: Int
+  updatedAt: timestamptz
+}
+
+"""
+response of any mutation on the table "products"
+"""
+type ProductsMutationResponse {
+  """number of rows affected by the mutation"""
+  affectedRows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [Products!]!
+}
+
+"""
+input type for inserting object relation for remote table "products"
+"""
+input ProductsObjRelInsertInput {
+  data: ProductsInsertInput!
+
+  """upsert condition"""
+  onConflict: ProductsOnConflict
+}
+
+"""
+on_conflict condition type for table "products"
+"""
+input ProductsOnConflict {
+  constraint: ProductsConstraint!
+  updateColumns: [ProductsUpdateColumn!]! = []
+  where: ProductsBoolExp
+}
+
+"""Ordering options when selecting data from "products"."""
+input ProductsOrderBy {
+  createdAt: OrderBy
+  id: OrderBy
+  name: OrderBy
+  price: OrderBy
+  stock: OrderBy
+  updatedAt: OrderBy
+}
+
+"""primary key columns input for table: products"""
+input ProductsPkColumnsInput {
+  id: bigint!
+}
+
+"""
+select columns of table "products"
+"""
+enum ProductsSelectColumn {
+  """column name"""
+  createdAt
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  price
+
+  """column name"""
+  stock
+
+  """column name"""
+  updatedAt
+}
+
+"""
+input type for updating data in table "products"
+"""
+input ProductsSetInput {
+  createdAt: timestamptz
+  name: String
+  price: numeric
+  stock: Int
+  updatedAt: timestamptz
+}
+
+"""
+update columns of table "products"
+"""
+enum ProductsUpdateColumn {
+  """column name"""
+  createdAt
+
+  """column name"""
+  name
+
+  """column name"""
+  price
+
+  """column name"""
+  stock
+
+  """column name"""
+  updatedAt
+}
+
+input ProductsUpdates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: ProductsIncInput
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: ProductsSetInput
+
+  """filter the rows which have to be updated"""
+  where: ProductsBoolExp!
 }
 
 """
@@ -484,6 +1338,28 @@ scalar bigint
 """mutation root"""
 type mutation_root {
   """
+  insert a single row into the table: "orders"
+  """
+  createOrder(
+    """the row to be inserted"""
+    object: OrdersInsertInput!
+
+    """upsert condition"""
+    onConflict: OrdersOnConflict
+  ): Orders
+
+  """
+  insert a single row into the table: "products"
+  """
+  createProduct(
+    """the row to be inserted"""
+    object: ProductsInsertInput!
+
+    """upsert condition"""
+    onConflict: ProductsOnConflict
+  ): Products
+
+  """
   delete single row from the table: "authors"
   """
   deleteAuthor(id: bigint!): Authors
@@ -511,6 +1387,41 @@ type mutation_root {
     """filter the rows which have to be deleted"""
     where: BooksBoolExp!
   ): BooksMutationResponse
+
+  """
+  delete single row from the table: "orders"
+  """
+  deleteOrder(id: bigint!): Orders
+
+  """
+  delete data from the table: "order_items"
+  """
+  deleteOrderItems(
+    """filter the rows which have to be deleted"""
+    where: OrderItemsBoolExp!
+  ): OrderItemsMutationResponse
+
+  """
+  delete single row from the table: "order_items"
+  """
+  deleteOrderItemsByPk(id: bigint!): OrderItems
+  deleteOrders(
+    """filter the rows which have to be deleted"""
+    where: OrdersBoolExp!
+  ): OrdersMutationResponse
+
+  """
+  delete single row from the table: "products"
+  """
+  deleteProduct(id: bigint!): Products
+
+  """
+  delete data from the table: "products"
+  """
+  deleteProducts(
+    """filter the rows which have to be deleted"""
+    where: ProductsBoolExp!
+  ): ProductsMutationResponse
 
   """
   insert a single row into the table: "authors"
@@ -555,6 +1466,42 @@ type mutation_root {
     """upsert condition"""
     onConflict: BooksOnConflict
   ): BooksMutationResponse
+
+  """
+  insert data into the table: "order_items"
+  """
+  insertOrderItems(
+    """the rows to be inserted"""
+    objects: [OrderItemsInsertInput!]!
+
+    """upsert condition"""
+    onConflict: OrderItemsOnConflict
+  ): OrderItemsMutationResponse
+
+  """
+  insert a single row into the table: "order_items"
+  """
+  insertOrderItemsOne(
+    """the row to be inserted"""
+    object: OrderItemsInsertInput!
+
+    """upsert condition"""
+    onConflict: OrderItemsOnConflict
+  ): OrderItems
+  insertOrders(
+    """the rows to be inserted"""
+    objects: [OrdersInsertInput!]!
+
+    """upsert condition"""
+    onConflict: OrdersOnConflict
+  ): OrdersMutationResponse
+  insertProducts(
+    """the rows to be inserted"""
+    objects: [ProductsInsertInput!]!
+
+    """upsert condition"""
+    onConflict: ProductsOnConflict
+  ): ProductsMutationResponse
 
   """
   update single row of the table: "authors"
@@ -617,6 +1564,95 @@ type mutation_root {
     """updates to execute, in order"""
     updates: [BooksUpdates!]!
   ): [BooksMutationResponse]
+
+  """
+  update single row of the table: "orders"
+  """
+  updateOrder(
+    """sets the columns of the filtered rows to the given values"""
+    _set: OrdersSetInput
+    pkColumns: OrdersPkColumnsInput!
+  ): Orders
+
+  """
+  update data of the table: "order_items"
+  """
+  updateOrderItems(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: OrderItemsIncInput
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: OrderItemsSetInput
+
+    """filter the rows which have to be updated"""
+    where: OrderItemsBoolExp!
+  ): OrderItemsMutationResponse
+
+  """
+  update single row of the table: "order_items"
+  """
+  updateOrderItemsByPk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: OrderItemsIncInput
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: OrderItemsSetInput
+    pkColumns: OrderItemsPkColumnsInput!
+  ): OrderItems
+
+  """
+  update multiples rows of table: "order_items"
+  """
+  updateOrderItemsMany(
+    """updates to execute, in order"""
+    updates: [OrderItemsUpdates!]!
+  ): [OrderItemsMutationResponse]
+  updateOrders(
+    """sets the columns of the filtered rows to the given values"""
+    _set: OrdersSetInput
+
+    """filter the rows which have to be updated"""
+    where: OrdersBoolExp!
+  ): OrdersMutationResponse
+  updateOrdersMany(
+    """updates to execute, in order"""
+    updates: [OrdersUpdates!]!
+  ): [OrdersMutationResponse]
+
+  """
+  update single row of the table: "products"
+  """
+  updateProduct(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: ProductsIncInput
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: ProductsSetInput
+    pkColumns: ProductsPkColumnsInput!
+  ): Products
+  updateProducts(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: ProductsIncInput
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: ProductsSetInput
+
+    """filter the rows which have to be updated"""
+    where: ProductsBoolExp!
+  ): ProductsMutationResponse
+  updateProductsMany(
+    """updates to execute, in order"""
+    updates: [ProductsUpdates!]!
+  ): [ProductsMutationResponse]
+}
+
+scalar numeric
+
+input orderItemsAggregateBoolExpCount {
+  arguments: [OrderItemsSelectColumn!]
+  distinct: Boolean
+  filter: OrderItemsBoolExp
+  predicate: IntComparisonExp!
 }
 
 type query_root {
@@ -661,6 +1697,63 @@ type query_root {
     """A globally unique id"""
     id: ID!
   ): Node
+
+  """
+  fetch data from the table: "order_items"
+  """
+  orderItemsConnection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinctOn: [OrderItemsSelectColumn!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [OrderItemsOrderBy!]
+
+    """filter the rows returned"""
+    where: OrderItemsBoolExp
+  ): OrderItemsConnection!
+
+  """
+  fetch data from the table: "orders"
+  """
+  ordersConnection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinctOn: [OrdersSelectColumn!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [OrdersOrderBy!]
+
+    """filter the rows returned"""
+    where: OrdersBoolExp
+  ): OrdersConnection!
+
+  """
+  fetch data from the table: "products"
+  """
+  productsConnection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinctOn: [ProductsSelectColumn!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ProductsOrderBy!]
+
+    """filter the rows returned"""
+    where: ProductsBoolExp
+  ): ProductsConnection!
 }
 
 type subscription_root {
@@ -705,6 +1798,63 @@ type subscription_root {
     """A globally unique id"""
     id: ID!
   ): Node
+
+  """
+  fetch data from the table: "order_items"
+  """
+  orderItemsConnection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinctOn: [OrderItemsSelectColumn!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [OrderItemsOrderBy!]
+
+    """filter the rows returned"""
+    where: OrderItemsBoolExp
+  ): OrderItemsConnection!
+
+  """
+  fetch data from the table: "orders"
+  """
+  ordersConnection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinctOn: [OrdersSelectColumn!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [OrdersOrderBy!]
+
+    """filter the rows returned"""
+    where: OrdersBoolExp
+  ): OrdersConnection!
+
+  """
+  fetch data from the table: "products"
+  """
+  productsConnection(
+    after: String
+    before: String
+
+    """distinct select on columns"""
+    distinctOn: [ProductsSelectColumn!]
+    first: Int
+    last: Int
+
+    """sort the rows by one or more columns"""
+    orderBy: [ProductsOrderBy!]
+
+    """filter the rows returned"""
+    where: ProductsBoolExp
+  ): ProductsConnection!
 }
 
 scalar timestamptz
