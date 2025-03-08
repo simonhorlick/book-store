@@ -1,0 +1,8 @@
+{
+  "rules": ["enum-values-sorted-alphabetically"],
+  "schemaPaths": ["*.graphql"],
+  "customRulePaths": ["path/to/my/custom/rules/*.js"],
+  "rulesOptions": {
+      "enum-values-sorted-alphabetically": { "sortOrder": "lexicographical" }
+    }
+}

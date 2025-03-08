@@ -1,15 +1,22 @@
+directive @auth(requires: Role = ADMIN) on OBJECT | FIELD_DEFINITION
+
+enum Role {
+  ADMIN
+  REVIEWER
+  UNKNOWN
+  USER
+}
+
 schema {
   query: Query
-  #  mutation: Mutation
+  mutation: Mutation
 }
 
 type Query {
-  listBooks(limit: Int, offset: Int): [Book!]!
-  getBook(isbn: String): Book
+  listBooks(limit: Int! = 10, offset: Int! = 0): [Book!]!
+  getBook(isbn: String!): Book
+  listOrders(limit: Int! = 10, offset: Int! = 0): [Order!]!
 }
-
-#type Mutation {
-#}
 
 type Author {
   name: String
@@ -20,4 +27,80 @@ type Book {
   author: Author
   title: String
   isbn: String
+  banned: Boolean @auth(requires: ADMIN)
+}
+
+type Order {
+  id: Int!
+  items: [OrderItem!]!
+  status: String!
+  # totalPrice: Float!
+}
+
+type OrderItem {
+  id: Int!
+  price: Float!
+  product: Product!
+  quantity: Int!
+}
+
+type Product {
+  id: Int!
+  name: String!
+  price: Float!
+  stock: Int!
+}
+
+type Mutation {
+  checkout(order: OrderInput!): CheckoutResponse!
+}
+
+union CheckoutResponse =
+    FieldViolation
+  | InsufficientStockError
+  | InvalidPaymentMethodError
+  | Order
+
+interface BadRequest {
+  """
+  a human-readable explanation of the error
+  """
+  message: String!
+}
+
+type FieldViolation implements BadRequest {
+  """
+  a machine-readable code that identifies the error
+  """
+  code: String
+  """
+  the field that has the error
+  """
+  field: String
+  """
+  a human-readable explanation of the error
+  """
+  message: String!
+}
+
+interface CheckoutError {
+  message: String!
+}
+
+type InsufficientStockError implements CheckoutError {
+  message: String!
+}
+
+type InvalidPaymentMethodError implements CheckoutError {
+  message: String!
+}
+
+input OrderInput {
+  items: [OrderItemInput!]!
+  paymentMethod: String!
+}
+
+input OrderItemInput {
+  productId: Int!
+  quantity: Int!
 }
