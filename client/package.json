@@ -7,9 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "generate": "graphql-codegen --config codegen.ts",
-    "generate:watch": "graphql-codegen --config codegen.ts --watch",
-    "fetch": "gq http://localhost:8080/v1/graphql --introspect -H \"x-hasura-admin-secret: $SECRET\" > schema.graphql",
+    "generate": "graphql-codegen --config graphql.config.ts",
+    "generate:watch": "graphql-codegen --config graphql.config.ts --watch",
+    "fetch": "gq http://localhost:8080/v1beta1/relay --introspect -H \"x-hasura-admin-secret: $SECRET\" > schema.graphql",
     "test": "vitest"
   },
   "dependencies": {

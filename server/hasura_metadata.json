@@ -1,0 +1,106 @@
+{
+  "resource_version": 31,
+  "metadata": {
+    "version": 3,
+    "sources": [
+      {
+        "name": "book_store",
+        "kind": "postgres",
+        "tables": [
+          {
+            "table": {
+              "name": "authors",
+              "schema": "public"
+            },
+            "configuration": {
+              "column_config": {},
+              "custom_column_names": {},
+              "custom_root_fields": {
+                "delete_by_pk": "deleteAuthor",
+                "insert_one": "insertAuthor",
+                "select_by_pk": "author",
+                "update_by_pk": "updateAuthor"
+              }
+            }
+          },
+          {
+            "table": {
+              "name": "books",
+              "schema": "public"
+            },
+            "configuration": {
+              "column_config": {},
+              "custom_column_names": {},
+              "custom_root_fields": {
+                "delete_by_pk": "deleteBook",
+                "insert_one": "insertBook",
+                "select_by_pk": "book",
+                "update_by_pk": "updateBook"
+              }
+            },
+            "object_relationships": [
+              {
+                "name": "author",
+                "using": {
+                  "foreign_key_constraint_on": "author_id"
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "order_items",
+              "schema": "public"
+            },
+            "object_relationships": [
+              {
+                "name": "product",
+                "using": {
+                  "foreign_key_constraint_on": "product_id"
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "orders",
+              "schema": "public"
+            },
+            "array_relationships": [
+              {
+                "name": "orderItems",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "order_id",
+                    "table": {
+                      "name": "order_items",
+                      "schema": "public"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "products",
+              "schema": "public"
+            }
+          }
+        ],
+        "configuration": {
+          "connection_info": {
+            "database_url": {
+              "from_env": "PG_DATABASE_URL"
+            },
+            "isolation_level": "repeatable-read",
+            "use_prepared_statements": false
+          }
+        },
+        "customization": {
+          "naming_convention": "graphql-default"
+        }
+      }
+    ]
+  }
+}

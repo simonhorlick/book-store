@@ -24,7 +24,22 @@
     "plugins": [
       {
         "name": "@0no-co/graphqlsp",
-        "schema": "./schema.graphql"
+        "schemas": [
+          {
+            "name": "schema",
+            "schema": "./schema.graphql"
+          }
+        ]
+        // "schemas": [
+        //   {
+        //     "name": "schema",
+        //     "schema": "./schema.graphql"
+        //   },
+        //   {
+        //     "name": "checkout",
+        //     "schema": "./checkout.graphql"
+        //   }
+        // ]
       }
     ]
   },

@@ -14,45 +14,15 @@ directive @cached(
 ) on QUERY
 
 """An author of a book"""
-type Authors {
+type Authors implements Node {
   """A brief biography of the author"""
   bio: String
   createdAt: timestamptz!
-  id: bigint!
+  id: ID!
 
   """The name of the author. Cannot be empty."""
   name: String!
   updatedAt: timestamptz!
-}
-
-"""
-aggregated selection of "authors"
-"""
-type AuthorsAggregate {
-  aggregate: AuthorsAggregateFields
-  nodes: [Authors!]!
-}
-
-"""
-aggregate fields of "authors"
-"""
-type AuthorsAggregateFields {
-  avg: AuthorsAvgFields
-  count(columns: [AuthorsSelectColumn!], distinct: Boolean): Int!
-  max: AuthorsMaxFields
-  min: AuthorsMinFields
-  stddev: AuthorsStddevFields
-  stddevPop: AuthorsStddevPopFields
-  stddevSamp: AuthorsStddevSampFields
-  sum: AuthorsSumFields
-  varPop: AuthorsVarPopFields
-  varSamp: AuthorsVarSampFields
-  variance: AuthorsVarianceFields
-}
-
-"""aggregate avg on columns"""
-type AuthorsAvgFields {
-  id: Float
 }
 
 """
@@ -70,6 +40,14 @@ input AuthorsBoolExp {
 }
 
 """
+A Relay connection object on "authors"
+"""
+type AuthorsConnection {
+  edges: [AuthorsEdge!]!
+  pageInfo: PageInfo!
+}
+
+"""
 unique or primary key constraints on table "authors"
 """
 enum AuthorsConstraint {
@@ -79,6 +57,11 @@ enum AuthorsConstraint {
   authors_pkey
 }
 
+type AuthorsEdge {
+  cursor: String!
+  node: Authors!
+}
+
 """
 input type for inserting data into table "authors"
 """
@@ -86,30 +69,6 @@ input AuthorsInsertInput {
   """A brief biography of the author"""
   bio: String
   createdAt: timestamptz
-
-  """The name of the author. Cannot be empty."""
-  name: String
-  updatedAt: timestamptz
-}
-
-"""aggregate max on columns"""
-type AuthorsMaxFields {
-  """A brief biography of the author"""
-  bio: String
-  createdAt: timestamptz
-  id: bigint
-
-  """The name of the author. Cannot be empty."""
-  name: String
-  updatedAt: timestamptz
-}
-
-"""aggregate min on columns"""
-type AuthorsMinFields {
-  """A brief biography of the author"""
-  bio: String
-  createdAt: timestamptz
-  id: bigint
 
   """The name of the author. Cannot be empty."""
   name: String
@@ -193,49 +152,6 @@ input AuthorsSetInput {
   updatedAt: timestamptz
 }
 
-"""aggregate stddev on columns"""
-type AuthorsStddevFields {
-  id: Float
-}
-
-"""aggregate stddevPop on columns"""
-type AuthorsStddevPopFields {
-  id: Float
-}
-
-"""aggregate stddevSamp on columns"""
-type AuthorsStddevSampFields {
-  id: Float
-}
-
-"""
-Streaming cursor of the table "authors"
-"""
-input AuthorsStreamCursorInput {
-  """Stream column input with initial value"""
-  initialValue: AuthorsStreamCursorValueInput!
-
-  """cursor ordering"""
-  ordering: CursorOrdering
-}
-
-"""Initial value of the column from where the streaming should start"""
-input AuthorsStreamCursorValueInput {
-  """A brief biography of the author"""
-  bio: String
-  createdAt: timestamptz
-  id: bigint
-
-  """The name of the author. Cannot be empty."""
-  name: String
-  updatedAt: timestamptz
-}
-
-"""aggregate sum on columns"""
-type AuthorsSumFields {
-  id: bigint
-}
-
 """
 update columns of table "authors"
 """
@@ -261,21 +177,6 @@ input AuthorsUpdates {
   where: AuthorsBoolExp!
 }
 
-"""aggregate varPop on columns"""
-type AuthorsVarPopFields {
-  id: Float
-}
-
-"""aggregate varSamp on columns"""
-type AuthorsVarSampFields {
-  id: Float
-}
-
-"""aggregate variance on columns"""
-type AuthorsVarianceFields {
-  id: Float
-}
-
 """
 Boolean expression to compare columns of type "bigint". All fields are combined with logical 'AND'.
 """
@@ -292,13 +193,14 @@ input BigintComparisonExp {
 }
 
 """A single edition of a book"""
-type Books {
+type Books implements Node {
   """An object relationship"""
   author: Authors!
 
   """The author of the book"""
   authorId: bigint!
   createdAt: timestamptz!
+  id: ID!
 
   """The ISBN of the book. Must be a 10 or 13 digit ISBN."""
   isbn: String!
@@ -306,37 +208,6 @@ type Books {
   """The title of the book. Cannot be empty."""
   title: String!
   updatedAt: timestamptz!
-}
-
-"""
-aggregated selection of "books"
-"""
-type BooksAggregate {
-  aggregate: BooksAggregateFields
-  nodes: [Books!]!
-}
-
-"""
-aggregate fields of "books"
-"""
-type BooksAggregateFields {
-  avg: BooksAvgFields
-  count(columns: [BooksSelectColumn!], distinct: Boolean): Int!
-  max: BooksMaxFields
-  min: BooksMinFields
-  stddev: BooksStddevFields
-  stddevPop: BooksStddevPopFields
-  stddevSamp: BooksStddevSampFields
-  sum: BooksSumFields
-  varPop: BooksVarPopFields
-  varSamp: BooksVarSampFields
-  variance: BooksVarianceFields
-}
-
-"""aggregate avg on columns"""
-type BooksAvgFields {
-  """The author of the book"""
-  authorId: Float
 }
 
 """
@@ -355,6 +226,14 @@ input BooksBoolExp {
 }
 
 """
+A Relay connection object on "books"
+"""
+type BooksConnection {
+  edges: [BooksEdge!]!
+  pageInfo: PageInfo!
+}
+
+"""
 unique or primary key constraints on table "books"
 """
 enum BooksConstraint {
@@ -362,6 +241,11 @@ enum BooksConstraint {
   unique or primary key constraint on columns "isbn"
   """
   books_pkey
+}
+
+type BooksEdge {
+  cursor: String!
+  node: Books!
 }
 
 """
@@ -378,34 +262,6 @@ input type for inserting data into table "books"
 input BooksInsertInput {
   author: AuthorsObjRelInsertInput
 
-  """The author of the book"""
-  authorId: bigint
-  createdAt: timestamptz
-
-  """The ISBN of the book. Must be a 10 or 13 digit ISBN."""
-  isbn: String
-
-  """The title of the book. Cannot be empty."""
-  title: String
-  updatedAt: timestamptz
-}
-
-"""aggregate max on columns"""
-type BooksMaxFields {
-  """The author of the book"""
-  authorId: bigint
-  createdAt: timestamptz
-
-  """The ISBN of the book. Must be a 10 or 13 digit ISBN."""
-  isbn: String
-
-  """The title of the book. Cannot be empty."""
-  title: String
-  updatedAt: timestamptz
-}
-
-"""aggregate min on columns"""
-type BooksMinFields {
   """The author of the book"""
   authorId: bigint
   createdAt: timestamptz
@@ -490,55 +346,6 @@ input BooksSetInput {
   updatedAt: timestamptz
 }
 
-"""aggregate stddev on columns"""
-type BooksStddevFields {
-  """The author of the book"""
-  authorId: Float
-}
-
-"""aggregate stddevPop on columns"""
-type BooksStddevPopFields {
-  """The author of the book"""
-  authorId: Float
-}
-
-"""aggregate stddevSamp on columns"""
-type BooksStddevSampFields {
-  """The author of the book"""
-  authorId: Float
-}
-
-"""
-Streaming cursor of the table "books"
-"""
-input BooksStreamCursorInput {
-  """Stream column input with initial value"""
-  initialValue: BooksStreamCursorValueInput!
-
-  """cursor ordering"""
-  ordering: CursorOrdering
-}
-
-"""Initial value of the column from where the streaming should start"""
-input BooksStreamCursorValueInput {
-  """The author of the book"""
-  authorId: bigint
-  createdAt: timestamptz
-
-  """The ISBN of the book. Must be a 10 or 13 digit ISBN."""
-  isbn: String
-
-  """The title of the book. Cannot be empty."""
-  title: String
-  updatedAt: timestamptz
-}
-
-"""aggregate sum on columns"""
-type BooksSumFields {
-  """The author of the book"""
-  authorId: bigint
-}
-
 """
 update columns of table "books"
 """
@@ -570,31 +377,10 @@ input BooksUpdates {
   where: BooksBoolExp!
 }
 
-"""aggregate varPop on columns"""
-type BooksVarPopFields {
-  """The author of the book"""
-  authorId: Float
-}
-
-"""aggregate varSamp on columns"""
-type BooksVarSampFields {
-  """The author of the book"""
-  authorId: Float
-}
-
-"""aggregate variance on columns"""
-type BooksVarianceFields {
-  """The author of the book"""
-  authorId: Float
-}
-
-"""ordering argument of a cursor"""
-enum CursorOrdering {
-  """ascending ordering of the cursor"""
-  ASC
-
-  """descending ordering of the cursor"""
-  DESC
+"""An object with globally unique ID"""
+interface Node {
+  """A globally unique identifier"""
+  id: ID!
 }
 
 """column ordering options"""
@@ -616,6 +402,13 @@ enum OrderBy {
 
   """in descending order, nulls last"""
   DESC_NULLS_LAST
+}
+
+type PageInfo {
+  endCursor: String!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String!
 }
 
 """
@@ -691,6 +484,11 @@ scalar bigint
 """mutation root"""
 type mutation_root {
   """
+  delete single row from the table: "authors"
+  """
+  deleteAuthor(id: bigint!): Authors
+
+  """
   delete data from the table: "authors"
   """
   deleteAuthors(
@@ -699,9 +497,12 @@ type mutation_root {
   ): AuthorsMutationResponse
 
   """
-  delete single row from the table: "authors"
+  delete single row from the table: "books"
   """
-  deleteAuthorsByPk(id: bigint!): Authors
+  deleteBook(
+    """The ISBN of the book. Must be a 10 or 13 digit ISBN."""
+    isbn: String!
+  ): Books
 
   """
   delete data from the table: "books"
@@ -712,12 +513,15 @@ type mutation_root {
   ): BooksMutationResponse
 
   """
-  delete single row from the table: "books"
+  insert a single row into the table: "authors"
   """
-  deleteBooksByPk(
-    """The ISBN of the book. Must be a 10 or 13 digit ISBN."""
-    isbn: String!
-  ): Books
+  insertAuthor(
+    """the row to be inserted"""
+    object: AuthorsInsertInput!
+
+    """upsert condition"""
+    onConflict: AuthorsOnConflict
+  ): Authors
 
   """
   insert data into the table: "authors"
@@ -731,15 +535,15 @@ type mutation_root {
   ): AuthorsMutationResponse
 
   """
-  insert a single row into the table: "authors"
+  insert a single row into the table: "books"
   """
-  insertAuthorsOne(
+  insertBook(
     """the row to be inserted"""
-    object: AuthorsInsertInput!
+    object: BooksInsertInput!
 
     """upsert condition"""
-    onConflict: AuthorsOnConflict
-  ): Authors
+    onConflict: BooksOnConflict
+  ): Books
 
   """
   insert data into the table: "books"
@@ -753,15 +557,13 @@ type mutation_root {
   ): BooksMutationResponse
 
   """
-  insert a single row into the table: "books"
+  update single row of the table: "authors"
   """
-  insertBooksOne(
-    """the row to be inserted"""
-    object: BooksInsertInput!
-
-    """upsert condition"""
-    onConflict: BooksOnConflict
-  ): Books
+  updateAuthor(
+    """sets the columns of the filtered rows to the given values"""
+    _set: AuthorsSetInput
+    pkColumns: AuthorsPkColumnsInput!
+  ): Authors
 
   """
   update data of the table: "authors"
@@ -775,21 +577,24 @@ type mutation_root {
   ): AuthorsMutationResponse
 
   """
-  update single row of the table: "authors"
-  """
-  updateAuthorsByPk(
-    """sets the columns of the filtered rows to the given values"""
-    _set: AuthorsSetInput
-    pkColumns: AuthorsPkColumnsInput!
-  ): Authors
-
-  """
   update multiples rows of table: "authors"
   """
   updateAuthorsMany(
     """updates to execute, in order"""
     updates: [AuthorsUpdates!]!
   ): [AuthorsMutationResponse]
+
+  """
+  update single row of the table: "books"
+  """
+  updateBook(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: BooksIncInput
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: BooksSetInput
+    pkColumns: BooksPkColumnsInput!
+  ): Books
 
   """
   update data of the table: "books"
@@ -806,18 +611,6 @@ type mutation_root {
   ): BooksMutationResponse
 
   """
-  update single row of the table: "books"
-  """
-  updateBooksByPk(
-    """increments the numeric columns with given value of the filtered values"""
-    _inc: BooksIncInput
-
-    """sets the columns of the filtered rows to the given values"""
-    _set: BooksSetInput
-    pkColumns: BooksPkColumnsInput!
-  ): Books
-
-  """
   update multiples rows of table: "books"
   """
   updateBooksMany(
@@ -830,210 +623,88 @@ type query_root {
   """
   fetch data from the table: "authors"
   """
-  authors(
+  authorsConnection(
+    after: String
+    before: String
+
     """distinct select on columns"""
     distinctOn: [AuthorsSelectColumn!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
+    first: Int
+    last: Int
 
     """sort the rows by one or more columns"""
     orderBy: [AuthorsOrderBy!]
 
     """filter the rows returned"""
     where: AuthorsBoolExp
-  ): [Authors!]!
-
-  """
-  fetch aggregated fields from the table: "authors"
-  """
-  authorsAggregate(
-    """distinct select on columns"""
-    distinctOn: [AuthorsSelectColumn!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    orderBy: [AuthorsOrderBy!]
-
-    """filter the rows returned"""
-    where: AuthorsBoolExp
-  ): AuthorsAggregate!
-
-  """fetch data from the table: "authors" using primary key columns"""
-  authorsByPk(id: bigint!): Authors
+  ): AuthorsConnection!
 
   """
   fetch data from the table: "books"
   """
-  books(
+  booksConnection(
+    after: String
+    before: String
+
     """distinct select on columns"""
     distinctOn: [BooksSelectColumn!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
+    first: Int
+    last: Int
 
     """sort the rows by one or more columns"""
     orderBy: [BooksOrderBy!]
 
     """filter the rows returned"""
     where: BooksBoolExp
-  ): [Books!]!
-
-  """
-  fetch aggregated fields from the table: "books"
-  """
-  booksAggregate(
-    """distinct select on columns"""
-    distinctOn: [BooksSelectColumn!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    orderBy: [BooksOrderBy!]
-
-    """filter the rows returned"""
-    where: BooksBoolExp
-  ): BooksAggregate!
-
-  """fetch data from the table: "books" using primary key columns"""
-  booksByPk(
-    """The ISBN of the book. Must be a 10 or 13 digit ISBN."""
-    isbn: String!
-  ): Books
+  ): BooksConnection!
+  node(
+    """A globally unique id"""
+    id: ID!
+  ): Node
 }
 
 type subscription_root {
   """
   fetch data from the table: "authors"
   """
-  authors(
+  authorsConnection(
+    after: String
+    before: String
+
     """distinct select on columns"""
     distinctOn: [AuthorsSelectColumn!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
+    first: Int
+    last: Int
 
     """sort the rows by one or more columns"""
     orderBy: [AuthorsOrderBy!]
 
     """filter the rows returned"""
     where: AuthorsBoolExp
-  ): [Authors!]!
-
-  """
-  fetch aggregated fields from the table: "authors"
-  """
-  authorsAggregate(
-    """distinct select on columns"""
-    distinctOn: [AuthorsSelectColumn!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    orderBy: [AuthorsOrderBy!]
-
-    """filter the rows returned"""
-    where: AuthorsBoolExp
-  ): AuthorsAggregate!
-
-  """fetch data from the table: "authors" using primary key columns"""
-  authorsByPk(id: bigint!): Authors
-
-  """
-  fetch data from the table in a streaming manner: "authors"
-  """
-  authorsStream(
-    """maximum number of rows returned in a single batch"""
-    batchSize: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [AuthorsStreamCursorInput]!
-
-    """filter the rows returned"""
-    where: AuthorsBoolExp
-  ): [Authors!]!
+  ): AuthorsConnection!
 
   """
   fetch data from the table: "books"
   """
-  books(
+  booksConnection(
+    after: String
+    before: String
+
     """distinct select on columns"""
     distinctOn: [BooksSelectColumn!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
+    first: Int
+    last: Int
 
     """sort the rows by one or more columns"""
     orderBy: [BooksOrderBy!]
 
     """filter the rows returned"""
     where: BooksBoolExp
-  ): [Books!]!
-
-  """
-  fetch aggregated fields from the table: "books"
-  """
-  booksAggregate(
-    """distinct select on columns"""
-    distinctOn: [BooksSelectColumn!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    orderBy: [BooksOrderBy!]
-
-    """filter the rows returned"""
-    where: BooksBoolExp
-  ): BooksAggregate!
-
-  """fetch data from the table: "books" using primary key columns"""
-  booksByPk(
-    """The ISBN of the book. Must be a 10 or 13 digit ISBN."""
-    isbn: String!
-  ): Books
-
-  """
-  fetch data from the table in a streaming manner: "books"
-  """
-  booksStream(
-    """maximum number of rows returned in a single batch"""
-    batchSize: Int!
-
-    """cursor to stream the results returned by the query"""
-    cursor: [BooksStreamCursorInput]!
-
-    """filter the rows returned"""
-    where: BooksBoolExp
-  ): [Books!]!
+  ): BooksConnection!
+  node(
+    """A globally unique id"""
+    id: ID!
+  ): Node
 }
 
 scalar timestamptz

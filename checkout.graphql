@@ -1,0 +1,76 @@
+#import mutation_root from "schema.graphql"
+
+# FIXME: should import Order from "schema.graphql"
+type Order {
+  id: Int!
+  items: [OrderItem!]!
+  status: String!
+  totalPrice: Float!
+}
+type OrderItem {
+  id: Int!
+  price: Float!
+  product: Product!
+  quantity: Int!
+}
+type Product {
+  id: Int!
+  name: String!
+  price: Float!
+}
+
+extend type mutation_root {
+  checkout(order: OrderInput): CheckoutResponse
+}
+
+union CheckoutResponse =
+    FieldViolation
+  | InsufficientStockError
+  | InvalidPaymentMethodError
+  | Order
+
+interface BadRequest {
+  """
+  a human-readable explanation of the error
+  """
+  message: String!
+}
+
+type FieldViolation implements BadRequest {
+  """
+  a machine-readable code that identifies the error
+  """
+  code: String
+  """
+  the field that has the error
+  """
+  field: String
+  """
+  a human-readable explanation of the error
+  """
+  message: String!
+}
+
+interface CheckoutError {
+  message: String!
+}
+
+type InsufficientStockError implements CheckoutError {
+  message: String!
+}
+
+type InvalidPaymentMethodError implements CheckoutError {
+  message: String!
+  paymentMethod: String!
+}
+
+input OrderInput {
+  items: [OrderItemInput!]!
+  paymentMethod: String!
+}
+
+input OrderItemInput {
+  price: Float!
+  productId: Int!
+  quantity: Int!
+}

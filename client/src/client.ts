@@ -4,7 +4,7 @@ export async function execute<TResult, TVariables>(
   query: TypedDocumentString<TResult, TVariables>,
   ...[variables]: TVariables extends Record<string, never> ? [] : [TVariables]
 ) {
-  const response = await fetch("http://localhost:8080/v1/graphql", {
+  const response = await fetch("http://localhost:8080/v1beta1/relay", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
