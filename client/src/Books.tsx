@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { graphql } from "./__generated__/gql";
-import { execute } from "./client";
+import { httpClient } from "./client";
 import { ListBooksQuery } from "./__generated__/graphql";
 import { Book } from "./Book";
 
@@ -15,7 +15,11 @@ const listBooksQuery = graphql(`
 export function Books() {
   const [books, setBooks] = useState<ListBooksQuery>();
   useEffect(() => {
-    execute(listBooksQuery).then((res) => setBooks(res));
+    const controller = new AbortController();
+    httpClient
+      .execute(listBooksQuery, controller, {})
+      .then((res) => setBooks(res));
+    return () => controller.abort();
   }, []);
 
   return (
